@@ -12,11 +12,11 @@ class AboutUs extends React.Component
 
           <Carousel>
             <Carousel.Item>
-              <img
+              {/* <img
                 className="d-block w-100"
                 src={ require("./images/group.jpg") }
                 alt="Group shot"
-              />
+              /> */}
               <Carousel.Caption>
                 <h3>The Root of All Evil</h3>
                 <p>
@@ -27,11 +27,11 @@ class AboutUs extends React.Component
 
 
             <Carousel.Item>
-              <img
+              {/* <img
                 className="d-block w-100"
                 src={ require("./images/Amy-headshot.jpg") }
                 alt="Amy"
-              />
+              /> */}
               <Carousel.Caption>
                 <h3>Amy Pierce</h3>
                 <p>
@@ -42,11 +42,11 @@ class AboutUs extends React.Component
 
 
             <Carousel.Item>
-              <img
+              {/* <img
                 className="d-block w-100"
                 src={ require("./images/Adrian-headshot.jpg") }
                 alt="Adrian"
-              />
+              /> */}
 
               <Carousel.Caption>
                 <h3>Adrian Cosme-Halverson</h3>
@@ -57,11 +57,11 @@ class AboutUs extends React.Component
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
-              <img
+              {/* <img
                 className="d-block w-100"
                 src={ require("./images/Rhea-headshot.jpg") }
                 alt="Rhea"
-              />
+              /> */}
 
               <Carousel.Caption>
                 <h3>Rhea Mimi Carillo</h3>
