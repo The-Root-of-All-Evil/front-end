@@ -16,9 +16,12 @@ export default class InvoiceModal extends React.Component
         onHide={ this.props.handleModal }
       >
         <Modal.Header closeButton>
-          <Modal.Title>{ Invoice?.title }</Modal.Title>
+          <Modal.Title>{ Invoice?.project_name }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{ Invoice?.InvoiceBody }</Modal.Body>
+        <Modal.Body>{ Invoice?.description }</Modal.Body>
+        <Modal.Body>{ Invoice?.hourly_rate }</Modal.Body>
+        <Modal.Body>{ Invoice?.hours_worked }</Modal.Body>
+        
         <Modal.Footer className='footer'>
           <Button
             variant="primary"
