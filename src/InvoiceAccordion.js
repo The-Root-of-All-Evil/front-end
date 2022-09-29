@@ -1,55 +1,55 @@
 //import axios from 'axios';
 import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
-class LetterAccordion extends React.Component
+class InvoiceAccordion extends React.Component
 {
   constructor(props)
   {
     super(props);
     this.state = {
-      recipientsArr: [],
+      CompanysArr: [],
     }
   }
-  getRecipientNames = () =>
+  getCompanyNames = () =>
   {
-    let recipientsArr = [];
-    this.props.letters.forEach(letter =>
+    let CompanysArr = [];
+    this.props.Invoices.forEach(Invoice =>
     {
-      !recipientsArr.includes(letter.recipient)
-        ? recipientsArr.push(letter.recipient)
+      !CompanysArr.includes(Invoice.Company)
+        ? CompanysArr.push(Invoice.Company)
         : console.log('nothing here');
     });
-    return recipientsArr;
+    return CompanysArr;
   }
   render()
   {
-    let arr = this.getRecipientNames();
+    let arr = this.getCompanyNames();
 
-    let newArr = arr.map((recipient, idx) =>
+    let newArr = arr.map((Company, idx) =>
     {
       return (
         <>
           <Accordion.Item key={ idx } eventKey={ idx }>
-            <Accordion.Header>{ recipient }</Accordion.Header>
+            <Accordion.Header>{ Company }</Accordion.Header>
             {
-              this.props.letters.map((letter, idx) =>
+              this.props.Invoices.map((Invoice, idx) =>
               {
-                if (letter.recipient === recipient)
+                if (Invoice.Company === Company)
                 {
                   return (
                     <Accordion.Body
-                      key={ letter._id }
+                      key={ Invoice._id }
                     >
-                      { letter.title }
+                      { Invoice.title }
                       <Button
-                        key={ `${ letter._id }_1` }
-                        onClick={ () => this.props.handleModal(letter._id) }
+                        key={ `${ Invoice._id }_1` }
+                        onClick={ () => this.props.handleModal(Invoice._id) }
                       >
                         Open
                       </Button>
                       <Button
-                        key={ `${ letter._id }_2` }
-                        onClick={ () => this.props.confirmDelete(letter?._id) }
+                        key={ `${ Invoice._id }_2` }
+                        onClick={ () => this.props.confirmDelete(Invoice?._id) }
                       >
                         Delete
                       </Button>
@@ -67,11 +67,11 @@ class LetterAccordion extends React.Component
       );
     })
 
-    //this.getRecipientNames();
-    //console.log('letter array in letter accordion: ', this.props.letters);
+    //this.getCompanyNames();
+    //console.log('Invoice array in Invoice accordion: ', this.props.Invoices);
     return (
       <>
-        <h3> Your Saved Letters</h3>
+        <h3> Your Saved Invoices</h3>
         <Accordion>
           { newArr }
         </Accordion>
@@ -80,4 +80,4 @@ class LetterAccordion extends React.Component
   }
 }
 
-export default LetterAccordion;
+export default InvoiceAccordion;

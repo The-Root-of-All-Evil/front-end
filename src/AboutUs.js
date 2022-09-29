@@ -14,13 +14,13 @@ class AboutUs extends React.Component
             <Carousel.Item>
               <img
                 className="d-block w-100"
-                src={ require("./images/Gambino.jpg") }
+                src={ require("./images/group.jpg") }
                 alt="Group shot"
               />
               <Carousel.Caption>
-                <h3>The Childish Goblinos</h3>
+                <h3>The Root of All Evil</h3>
                 <p>
-                  The Childish Goblinos are the architects and instigators of the Lonely Beast application, and it's offshoots. We take all the credit and none of the blame for your results.
+                  This application brought to you by greed and desperation. Please feel free to use it and then send us money. We take all the credit and none of the blame for your results.
                 </p>
               </Carousel.Caption>
             </Carousel.Item>
@@ -35,7 +35,7 @@ class AboutUs extends React.Component
               <Carousel.Caption>
                 <h3>Amy Pierce</h3>
                 <p>
-                  Amy is a software developer and recovering accountant. More about her exploits can be found at http://amydoescode.com...eventually.
+                  Amy is a software developer and recovering accountant. She enjoys programming, buying fabric and restaurants. More about her exploits can be found at http://amydoescode.com ...eventually.
                 </p>
               </Carousel.Caption>
             </Carousel.Item>
@@ -44,14 +44,14 @@ class AboutUs extends React.Component
             <Carousel.Item>
               <img
                 className="d-block w-100"
-                src={ require("./images/Jackson-headshot.jpg") }
-                alt="Jackson"
+                src={ require("./images/Adrian-headshot.jpg") }
+                alt="Adrian"
               />
 
               <Carousel.Caption>
-                <h3>Jackson Gurney</h3>
+                <h3>Adrian Cosme-Halverson</h3>
                 <p>
-                  Jackson Gurney is a software developer and former member of the Coast Guard.
+                Adrian Cosme-Halverson is a software developer and Army veteran. He enjoys programming, video games and lifting. So if you disagree with his code choices, he'll meet you in the parking lot.
                 </p>
 
               </Carousel.Caption>
@@ -66,7 +66,7 @@ class AboutUs extends React.Component
               <Carousel.Caption>
                 <h3>Rhea Mimi Carillo</h3>
                 <p>
-                  Rhea Mimi Carillo is a software developer and former member of the Air Force.
+                  Rhea Mimi Carillo is a software developer and former member of the Air Force. She enjoying pooping and peeping and sleeping. 
                 </p>
 
               </Carousel.Caption>

@@ -9,7 +9,7 @@ class Header extends React.Component
   {
     return (
       <header>
-        <h1> Love Letter Helper</h1>
+        <h1> Invoice Keeper </h1>
       </header>
     )
   }
