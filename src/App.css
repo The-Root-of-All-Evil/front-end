@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+  display: grid;
+  /* grid-template-columns: 15% 25% 25% 25%;
+  grid-template-rows: 15% 25% 25% 25%; */
+}
+
+.App h1,
+h2,
+h3 {
+  font-family: 'Lobster', cursive;
+}
+
+.content {
+  height: 200px;
+  /* grid-area: 1 1 2 2; */
+}
+
+/* .main{
+  grid-area: 2 3 4 4;
+} */
