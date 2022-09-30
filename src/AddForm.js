@@ -23,7 +23,7 @@ class AddForm extends React.Component {
           className="mb-3" 
           controlId="addTitle"
         >
-          <Form.Label>Give Your Letter a Title</Form.Label>
+          <Form.Label>Give Your Invoice a Title</Form.Label>
           <Form.Control 
             type="text" 
             placeholder="An Outpouring of My Fulsome Emotion For Thee"
@@ -32,9 +32,9 @@ class AddForm extends React.Component {
 
         <Form.Group 
           className="mb-3" 
-          controlId="addLetter"
+          controlId="addInvoice"
         >
-          <Form.Label>Write Your Letter (2000 Character Limit)</Form.Label>
+          <Form.Label>Write Your Invoice (2000 Character Limit)</Form.Label>
           <Form.Control 
             as="textarea" 
             rows={8} 
@@ -43,7 +43,7 @@ class AddForm extends React.Component {
             maxLength={2000}
           />
         </Form.Group>
-        <Button type="submit">Add A Letter</Button>
+        <Button type="submit">Add A Invoice</Button>
       </Form>
       </> 
       )

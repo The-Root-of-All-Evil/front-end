@@ -2,13 +2,13 @@ import React from "react"
 import { Button, Modal } from "react-bootstrap"
 //import Button from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './LetterModal.css';
+import './InvoiceModal.css';
 
-export default class LetterModal extends React.Component
+export default class InvoiceModal extends React.Component
 {
   render()
   {
-    let letter = this.props.letters.filter(recipient => recipient._id === this.props.modalId)[0];
+    let Invoice = this.props.Invoices.filter(recipient => recipient._id === this.props.modalId)[0];
     return (
       <Modal
         className='modal'
@@ -16,19 +16,19 @@ export default class LetterModal extends React.Component
         onHide={ this.props.handleModal }
       >
         <Modal.Header closeButton>
-          <Modal.Title>{ letter?.title }</Modal.Title>
+          <Modal.Title>{ Invoice?.title }</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{ letter?.letterBody }</Modal.Body>
+        <Modal.Body>{ Invoice?.InvoiceBody }</Modal.Body>
         <Modal.Footer className='footer'>
           <Button
             variant="primary"
-            onClick={ () => this.props.showEditForm(letter) }
+            onClick={ () => this.props.showEditForm(Invoice) }
           >
             Edit
           </Button>
           <Button
             variant="secondary"
-            onClick={ () => this.props.confirmDelete(letter?._id) }
+            onClick={ () => this.props.confirmDelete(Invoice?._id) }
           >
             Delete
           </Button>

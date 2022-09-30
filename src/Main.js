@@ -1,14 +1,13 @@
 import React from 'react';
 import AddForm from './AddForm';
 import EditForm from './EditForm';
-import Score from './Score';
 // withAuth0, because this is a Class-based component
 // this allows us to use the `user` object in props
 import { withAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
-import LetterAccordion from './LetterAccordion';
-import LetterModal from './LetterModal';
+import InvoiceAccordion from './InvoiceAccordion';
+import InvoiceModal from './InvoiceModal';
 import './Main.css';
 
 import AboutUs from './AboutUs';
@@ -21,12 +20,11 @@ class Main extends React.Component
   {
     super(props);
     this.state = {
-      letters: [],
-      letter: {},
-      letterBody: '',
+      Invoices: [],
+      Invoice: {},
+      InvoiceBody: '',
       showModal: false,
       modalId: '',
-      score: {},
       displayEdit: false,
       displayAboutUs: false,
     }
@@ -38,9 +36,9 @@ class Main extends React.Component
       displayAboutUs: !this.state.displayAboutUs,
     })
   }
-  getLetters = async () =>
+  getInvoices = async () =>
   {
-    // if the user is authenticated, they can get letters
+    // if the user is authenticated, they can get Invoices
     if (this.props.auth0.isAuthenticated)
     {
       try
@@ -59,7 +57,7 @@ class Main extends React.Component
         const config = {
           method: 'get',
           baseURL: `${ SERVER }`,
-          url: '/letters',
+          url: '/Invoices',
           headers: {
             "email": `${ this.props.auth0.user.email }`,
 
@@ -68,15 +66,15 @@ class Main extends React.Component
           }
         };
         // //console.log('config: ', config);
-        let letterData = await axios(config);
+        let InvoiceData = await axios(config);
 
         // 
-        //console.log(letterData.data);
+        //console.log(InvoiceData.data);
 
-        // set the letter data from our mongo database into state
+        // set the Invoice data from our mongo database into state
         // which'll re-render the page
 
-        let sortedLetters = letterData.data.sort((a, b) =>
+        let sortedInvoices = InvoiceData.data.sort((a, b) =>
         {
           if (a.recipient.charAt(0).toLowerCase() > b.recipient.charAt(0).toLowerCase())
           {
@@ -95,19 +93,19 @@ class Main extends React.Component
         });
 
         this.setState({
-          letters: sortedLetters,
+          Invoices: sortedInvoices,
         })
-        console.log(sortedLetters);
+        console.log(sortedInvoices);
       }
       catch (err)
       {
-        //console.log(`Problem getting letters for ${this.props.auth0.user.name}: `, err.message);
+        //console.log(`Problem getting Invoices for ${this.props.auth0.user.name}: `, err.message);
       }
     }
     else
     {
       // display a message asking users to log in
-      // TODO: change the render to display something to let the user know they aren't logged in and can't see letters
+      // TODO: change the render to display something to let the user know they aren't logged in and can't see Invoices
       //console.log('please log in');
     }
   }
@@ -118,39 +116,38 @@ class Main extends React.Component
       modalId: id
     })
   }
-  //make a letter object
+  //make a Invoice object
   handleAddSubmit = (e) =>
   {
     e.preventDefault();
-    let letter = {
+    let Invoice = {
       title: e.target.addTitle.value,
       recipient: e.target.addRecipient.value,
-      letterBody: this.state.letterBody,
+      InvoiceBody: this.state.InvoiceBody,
 
       //    email: [CALLED FROM AUTH0 SECRET STATE]
       email: this.props.auth0.user.email,
-      //score: this.state.scoreText
     }
 
-    //console.log('letter: ', letter);
+    //console.log('Invoice: ', Invoice);
 
-    this.addLetter(letter);
+    this.addInvoice(Invoice);
 
   }
 
   handleCharCount = e =>
   {
     e.preventDefault();
-    // //console.log('letter body in handle char: ', e.target.value);
+    // //console.log('Invoice body in handle char: ', e.target.value);
     this.setState({
-      letterBody: e.target.value,
+      InvoiceBody: e.target.value,
     });
   }
 
 
-  //THIS IS THE FUNCTION TO CREATE THE LETTERS
+  //THIS IS THE FUNCTION TO CREATE THE InvoiceS
 
-  addLetter = async (letter) =>
+  addInvoice = async (Invoice) =>
   {
     if (this.props.auth0.isAuthenticated)
     {
@@ -169,47 +166,47 @@ class Main extends React.Component
         const config = {
           method: 'post',
           baseURL: `${ SERVER }`,
-          url: '/letters',
+          url: '/Invoices',
           headers: {
             // pass token into the headers
             "Authorization": `Bearer ${ jwt }`
           },
-          data: letter,
+          data: Invoice,
         }
 
         // log to see what the config file looks like
-        // //console.log('add letter config: ', config);
+        // //console.log('add Invoice config: ', config);
 
-        let createdLetter = await axios(config);
+        let createdInvoice = await axios(config);
 
-        // log the letter that axios returns to us
-        //console.log('createdLetter: ', createdLetter.data);
+        // log the Invoice that axios returns to us
+        //console.log('createdInvoice: ', createdInvoice.data);
 
 
-        // use spread operator to make a deep copy of letters array in state, and concatenate the createdLetter.data to the end
+        // use spread operator to make a deep copy of Invoices array in state, and concatenate the createdInvoice.data to the end
         this.setState({
-          letters: [...this.state.letters, createdLetter.data],
+          Invoices: [...this.state.Invoices, createdInvoice.data],
         });
       }
       catch (e)
       {
-        //console.log('This letter wasn\'t saved. ', e.response)
+        //console.log('This Invoice wasn\'t saved. ', e.response)
       }
     }
   }
 
-  // function to ask user if they `really want to delete?` their letter
+  // function to ask user if they `really want to delete?` their Invoice
   confirmDelete = (id) =>
   {
-    let yesDelete = prompt(`${ this.props.auth0.user.name }, Are you sure you want to delete this letter?`).toLowerCase();
+    let yesDelete = prompt(`${ this.props.auth0.user.name }, Are you sure you want to delete this Invoice?`).toLowerCase();
 
     if (yesDelete === 'yes' || yesDelete === 'y')
     {
-      this.deleteLetter(id);
+      this.deleteInvoice(id);
     }
   }
 
-  deleteLetter = async (id) =>
+  deleteInvoice = async (id) =>
   {
     if (this.props.auth0.isAuthenticated)
     {
@@ -229,7 +226,7 @@ class Main extends React.Component
         const config = {
           method: 'delete',
           baseURL: `${ SERVER }`,
-          url: `/letters/${ id }`,
+          url: `/Invoices/${ id }`,
           headers: {
             // pass token into the headers
             "Authorization": `Bearer ${ jwt }`
@@ -237,52 +234,51 @@ class Main extends React.Component
         }
 
         // log to see what the config file looks like
-        // //console.log('add letter config: ', config);
+        // //console.log('add Invoice config: ', config);
         await axios(config);
 
-        let updatedLetters = this.state.letters.filter(letter => letter._id !== id);
+        let updatedInvoices = this.state.Invoices.filter(Invoice => Invoice._id !== id);
 
-        //console.log(updatedLetters);
+        //console.log(updatedInvoices);
 
-        // set the updatedLetters array to state
+        // set the updatedInvoices array to state
         this.setState({
-          letters: updatedLetters,
+          Invoices: updatedInvoices,
           showModal: false,
         });
       }
       catch (err)
       {
-        //console.log('This letter wasn\'t deleted. ', err.response);
+        //console.log('This Invoice wasn\'t deleted. ', err.response);
       }
     }
   }
-  showEditForm = letter =>
+  showEditForm = Invoice =>
   {
-    //console.log('Letter in Edit Handler: ', letter);
+    //console.log('Invoice in Edit Handler: ', Invoice);
     this.setState({
       displayEdit: true,
-      letter: letter,
+      Invoice: Invoice,
       showModal: false,
     })
   }
   handleEditSubmit = e =>
   {
     e.preventDefault();
-    let letter = {
+    let Invoice = {
       title: e.target.title.value,
       recipient: e.target.recipient.value,
-      letterBody: e.target.letterBody.value,
+      InvoiceBody: e.target.InvoiceBody.value,
       // email: [CALLED FROM AUTH0 SECRET STATE]
       email: this.props.auth0.user.email,
-      //score: this.state.scoreText
-      _id: this.state.letter._id,
-      __v: this.state.letter.__v
+      _id: this.state.Invoice._id,
+      __v: this.state.Invoice.__v
     }
-    console.log('handleEditSubmit letter:', letter)
-    this.updateLetters(letter)
+    console.log('handleEditSubmit Invoice:', Invoice)
+    this.updateInvoices(Invoice)
   }
 
-  updateLetters = async updatedLetter =>
+  updateInvoices = async updatedInvoice =>
   {
     if (this.props.auth0.isAuthenticated)
     {
@@ -302,66 +298,47 @@ class Main extends React.Component
         const config = {
           method: 'put',
           baseURL: `${ SERVER }`,
-          url: `/letters/${ updatedLetter._id }`,
+          url: `/Invoices/${ updatedInvoice._id }`,
           headers: {
             // pass token into the headers
             "Authorization": `Bearer ${ jwt }`
           },
-          data: updatedLetter,
+          data: updatedInvoice,
 
 
         }
-        // get the updatedLetter from the database
-        let updatedLetterFromDB = await axios(config);
+        // get the updatedInvoice from the database
+        let updatedInvoiceFromDB = await axios(config);
 
-        // update state, so that it can re-render with updatedLetters info
+        // update state, so that it can re-render with updatedInvoices info
 
-        let updatedLetterArray = this.state.letters.map(existingLetter =>
+        let updatedInvoiceArray = this.state.Invoices.map(existingInvoice =>
         {
-          // if the `._id` matches the letter we want to update:
-          // replace that element with the updatedLetterFromDB letter object
+          // if the `._id` matches the Invoice we want to update:
+          // replace that element with the updatedInvoiceFromDB Invoice object
 
-          return existingLetter._id === updatedLetter._id
-            ? updatedLetterFromDB.data
-            : existingLetter;
+          return existingInvoice._id === updatedInvoice._id
+            ? updatedInvoiceFromDB.data
+            : existingInvoice;
         });
 
         this.setState({
-          letters: updatedLetterArray,
+          Invoices: updatedInvoiceArray,
           displayEdit: false,
         })
       }
       catch (err)
       {
-        //console.log('could not delete this letter: ', err.response.data);
+        //console.log('could not delete this Invoice: ', err.response.data);
       }
     }
   }
 
-  handleScore = async () =>
-  {
-    if (this.state.letter)
-    {
-      let letterToScore = this.state.letter.letterBody || this.state.letterBody;
-      console.log(this.state.letter, ' ', this.state.letterBody);
-      let URL = `${ SERVER }/sentiment?text=${ letterToScore }`;
-      console.log("letter to score", letterToScore);
-      let result = await axios.get(URL);
-      console.log(result);
-      let score = result.data;
-      console.log('Score ', score);
-      this.setState({
-        score: score,
-      })
-    }
-  }
-
-
-  // letters will load as soon as this page is loaded
+  // Invoices will load as soon as this page is loaded
   // the page will only be loaded if they get through auth0
   componentDidMount()
   {
-    this.getLetters();
+    this.getInvoices();
   }
   render()
   {
@@ -375,7 +352,7 @@ class Main extends React.Component
 
           { this.state.displayEdit ?
             <EditForm
-              letter={ this.state.letter }
+              Invoice={ this.state.Invoice }
               confirmDelete={ this.confirmDelete }
               handleEditSubmit={ this.handleEditSubmit } />
             :
@@ -385,25 +362,22 @@ class Main extends React.Component
             />
           }
           {
-            this.state.letters.length
+            this.state.Invoices.length
               ? <>
-                <Score
-                  handleScore={ this.handleScore }
-                  score={ this.state.score } />
-                <LetterAccordion
-                  letters={ this.state.letters }
+                <InvoiceAccordion
+                  Invoices={ this.state.Invoices }
                   handleModal={ this.handleModal }
                   confirmDelete={ this.confirmDelete }
                 />
-                <LetterModal show={ this.state.showModal } handleModal={ this.handleModal }
-                  letters={ this.state.letters }
+                <InvoiceModal show={ this.state.showModal } handleModal={ this.handleModal }
+                  Invoices={ this.state.Invoices }
                   modalId={ this.state.modalId }
                   confirmDelete={ this.confirmDelete }
                   showEditForm={ this.showEditForm }
                 />
 
               </>
-              : <p>Write your beloved a letter!</p>
+              : <p>Write your beloved a Invoice!</p>
 
 
           }
