@@ -10,40 +10,60 @@ class AddForm extends React.Component {
       <Form onSubmit={this.props.handleAddSubmit}>      
         <Form.Group 
           className="mb-3" 
-          controlId="addRecipient"
+          controlId="addCompany"
         >
-          <Form.Label>Choose a Recipient</Form.Label>
+          <Form.Label>Company Name</Form.Label>
           <Form.Control 
             type="text" 
-            placeholder="Oh My Most Beloved!" 
+            placeholder="ABC Corporation" 
           />
         </Form.Group>
 
         <Form.Group 
           className="mb-3" 
-          controlId="addTitle"
+          controlId="addProject"
         >
-          <Form.Label>Give Your Invoice a Title</Form.Label>
+          <Form.Label>Project Title</Form.Label>
           <Form.Control 
             type="text" 
-            placeholder="An Outpouring of My Fulsome Emotion For Thee"
+            placeholder="Web Development Project Name and Number"
           />
         </Form.Group>
 
         <Form.Group 
           className="mb-3" 
-          controlId="addInvoice"
+          controlId="addDescription"
         >
-          <Form.Label>Write Your Invoice (2000 Character Limit)</Form.Label>
+          <Form.Label>Project Billing Description (2000 Character Limit)</Form.Label>
           <Form.Control 
             as="textarea" 
             rows={8} 
-            placeholder="I am full of such forbidden desires for thy most comely self. Please grace me with your affections, lest I die."        
+            placeholder="Added web server and database"        
             onInput={this.props.handleCharCount}
             maxLength={2000}
           />
         </Form.Group>
-        <Button type="submit">Add A Invoice</Button>
+        <Form.Group 
+          className="mb-3" 
+          controlId="addRate"
+        >
+          <Form.Label>Hourly Rate</Form.Label>
+          <Form.Control 
+            type="number" 
+            placeholder="35"
+          />
+        </Form.Group>
+        <Form.Group 
+          className="mb-3" 
+          controlId="addHours"
+        >
+          <Form.Label>Hours Worked</Form.Label>
+          <Form.Control 
+            type="Number" 
+            placeholder="100"
+          />
+        </Form.Group>
+        <Button type="submit">Add An Invoice</Button>
       </Form>
       </> 
       )

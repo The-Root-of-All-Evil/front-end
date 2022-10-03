@@ -14,15 +14,13 @@ import AboutUs from './AboutUs';
 
 let SERVER = process.env.REACT_APP_SERVER;
 
-class Main extends React.Component
-{
-  constructor(props)
-  {
+class Main extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       Invoices: [],
       Invoice: {},
-      InvoiceBody: '',
+      description: '',
       showModal: false,
       modalId: '',
       displayEdit: false,
@@ -30,19 +28,15 @@ class Main extends React.Component
     }
   }
 
-  handleAboutUs = (id) =>
-  {
+  handleAboutUs = (id) => {
     this.setState({
       displayAboutUs: !this.state.displayAboutUs,
     })
   }
-  getInvoices = async () =>
-  {
+  getInvoices = async () => {
     // if the user is authenticated, they can get Invoices
-    if (this.props.auth0.isAuthenticated)
-    {
-      try
-      {
+    if (this.props.auth0.isAuthenticated) {
+      try {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -50,19 +44,19 @@ class Main extends React.Component
         // this is the raw token
         // note the double underscore __ in .__raw
         const jwt = res.__raw;
-        // //console.log('jwt: ', jwt)
+        console.log('jwt: ', jwt)
 
 
         // config to do a `get` request from our server using the user's email
         const config = {
           method: 'get',
-          baseURL: `${ SERVER }`,
+          baseURL: `${SERVER}`,
           url: '/Invoices',
           headers: {
-            "email": `${ this.props.auth0.user.email }`,
+            "email": `${this.props.auth0.user.email}`,
 
             // pass token into the headers
-            "Authorization": `Bearer ${ jwt }`
+            "Authorization": `Bearer ${jwt}`
           }
         };
         // //console.log('config: ', config);
@@ -74,19 +68,15 @@ class Main extends React.Component
         // set the Invoice data from our mongo database into state
         // which'll re-render the page
 
-        let sortedInvoices = InvoiceData.data.sort((a, b) =>
-        {
-          if (a.recipient.charAt(0).toLowerCase() > b.recipient.charAt(0).toLowerCase())
-          {
+        let sortedInvoices = InvoiceData.data.sort((a, b) => {
+          if (a.recipient.charAt(0).toLowerCase() > b.recipient.charAt(0).toLowerCase()) {
             return 1;
           }
 
-          else if (a.recipient.charAt(0).toLowerCase() < b.recipient.charAt(0).toLowerCase())
-          {
+          else if (a.recipient.charAt(0).toLowerCase() < b.recipient.charAt(0).toLowerCase()) {
             return -1;
           }
-          else
-          {
+          else {
             return 0;
           }
 
@@ -97,62 +87,56 @@ class Main extends React.Component
         })
         console.log(sortedInvoices);
       }
-      catch (err)
-      {
+      catch (err) {
         //console.log(`Problem getting Invoices for ${this.props.auth0.user.name}: `, err.message);
       }
     }
-    else
-    {
+    else {
       // display a message asking users to log in
       // TODO: change the render to display something to let the user know they aren't logged in and can't see Invoices
       //console.log('please log in');
     }
   }
-  handleModal = (id) =>
-  {
+  handleModal = (id) => {
     this.setState({
       showModal: !this.state.showModal,
       modalId: id
     })
   }
   //make a Invoice object
-  handleAddSubmit = (e) =>
-  {
+  handleAddSubmit = (e) => {
     e.preventDefault();
-    let Invoice = {
-      title: e.target.addTitle.value,
-      recipient: e.target.addRecipient.value,
-      InvoiceBody: this.state.InvoiceBody,
+    let invoice = {
+      company_name: e.target.addCompany.value,
+      project_name: e.target.addProject.value,
+      description: this.state.description,
+      hourly_rate: e.target.addRate.value,
+      hours_worked: e.target.addHours.value,
 
       //    email: [CALLED FROM AUTH0 SECRET STATE]
       email: this.props.auth0.user.email,
     }
 
-    //console.log('Invoice: ', Invoice);
+    //console.log('Invoice: ', invoice);
 
-    this.addInvoice(Invoice);
+    this.addInvoice(invoice);
 
   }
 
-  handleCharCount = e =>
-  {
+  handleCharCount = e => {
     e.preventDefault();
     // //console.log('Invoice body in handle char: ', e.target.value);
     this.setState({
-      InvoiceBody: e.target.value,
+      description: e.target.value,
     });
   }
 
 
   //THIS IS THE FUNCTION TO CREATE THE InvoiceS
 
-  addInvoice = async (Invoice) =>
-  {
-    if (this.props.auth0.isAuthenticated)
-    {
-      try
-      {
+  addInvoice = async (Invoice) => {
+    if (this.props.auth0.isAuthenticated) {
+      try {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -165,11 +149,11 @@ class Main extends React.Component
 
         const config = {
           method: 'post',
-          baseURL: `${ SERVER }`,
-          url: '/Invoices',
+          baseURL: `${SERVER}`,
+          url: '/invoices',
           headers: {
             // pass token into the headers
-            "Authorization": `Bearer ${ jwt }`
+            "Authorization": `Bearer ${jwt}`
           },
           data: Invoice,
         }
@@ -180,7 +164,7 @@ class Main extends React.Component
         let createdInvoice = await axios(config);
 
         // log the Invoice that axios returns to us
-        //console.log('createdInvoice: ', createdInvoice.data);
+        console.log('createdInvoice: ', createdInvoice.data);
 
 
         // use spread operator to make a deep copy of Invoices array in state, and concatenate the createdInvoice.data to the end
@@ -188,30 +172,24 @@ class Main extends React.Component
           Invoices: [...this.state.Invoices, createdInvoice.data],
         });
       }
-      catch (e)
-      {
-        //console.log('This Invoice wasn\'t saved. ', e.response)
+      catch (e) {
+        console.log('This Invoice wasn\'t saved. ', e.response)
       }
     }
   }
 
   // function to ask user if they `really want to delete?` their Invoice
-  confirmDelete = (id) =>
-  {
-    let yesDelete = prompt(`${ this.props.auth0.user.name }, Are you sure you want to delete this Invoice?`).toLowerCase();
+  confirmDelete = (id) => {
+    let yesDelete = prompt(`${this.props.auth0.user.name}, Are you sure you want to delete this Invoice?`).toLowerCase();
 
-    if (yesDelete === 'yes' || yesDelete === 'y')
-    {
+    if (yesDelete === 'yes' || yesDelete === 'y') {
       this.deleteInvoice(id);
     }
   }
 
-  deleteInvoice = async (id) =>
-  {
-    if (this.props.auth0.isAuthenticated)
-    {
-      try
-      {
+  deleteInvoice = async (id) => {
+    if (this.props.auth0.isAuthenticated) {
+      try {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -225,11 +203,11 @@ class Main extends React.Component
         // config to do a `DELETE` request from our server using the user's email
         const config = {
           method: 'delete',
-          baseURL: `${ SERVER }`,
-          url: `/Invoices/${ id }`,
+          baseURL: `${SERVER}`,
+          url: `/Invoices/${id}`,
           headers: {
             // pass token into the headers
-            "Authorization": `Bearer ${ jwt }`
+            "Authorization": `Bearer ${jwt}`
           },
         }
 
@@ -247,14 +225,12 @@ class Main extends React.Component
           showModal: false,
         });
       }
-      catch (err)
-      {
+      catch (err) {
         //console.log('This Invoice wasn\'t deleted. ', err.response);
       }
     }
   }
-  showEditForm = Invoice =>
-  {
+  showEditForm = Invoice => {
     //console.log('Invoice in Edit Handler: ', Invoice);
     this.setState({
       displayEdit: true,
@@ -262,14 +238,17 @@ class Main extends React.Component
       showModal: false,
     })
   }
-  handleEditSubmit = e =>
-  {
+  handleEditSubmit = e => {
     e.preventDefault();
     let Invoice = {
-      title: e.target.title.value,
-      recipient: e.target.recipient.value,
-      InvoiceBody: e.target.InvoiceBody.value,
-      // email: [CALLED FROM AUTH0 SECRET STATE]
+     
+      company_name: e.target.editCompany.value,
+      project_name: e.target.editProject.value,
+      description: e.target.editDescription.value,
+      hourly_rate: e.target.editRate.value,
+      hours_worked: e.target.editHours.value,
+
+      //    email: [CALLED FROM AUTH0 SECRET STATE]
       email: this.props.auth0.user.email,
       _id: this.state.Invoice._id,
       __v: this.state.Invoice.__v
@@ -278,12 +257,9 @@ class Main extends React.Component
     this.updateInvoices(Invoice)
   }
 
-  updateInvoices = async updatedInvoice =>
-  {
-    if (this.props.auth0.isAuthenticated)
-    {
-      try
-      {
+  updateInvoices = async updatedInvoice => {
+    if (this.props.auth0.isAuthenticated) {
+      try {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -297,11 +273,11 @@ class Main extends React.Component
         // config to do a `PUT` request from our server using the user's email
         const config = {
           method: 'put',
-          baseURL: `${ SERVER }`,
-          url: `/Invoices/${ updatedInvoice._id }`,
+          baseURL: `${SERVER}`,
+          url: `/Invoices/${updatedInvoice._id}`,
           headers: {
             // pass token into the headers
-            "Authorization": `Bearer ${ jwt }`
+            "Authorization": `Bearer ${jwt}`
           },
           data: updatedInvoice,
 
@@ -312,8 +288,7 @@ class Main extends React.Component
 
         // update state, so that it can re-render with updatedInvoices info
 
-        let updatedInvoiceArray = this.state.Invoices.map(existingInvoice =>
-        {
+        let updatedInvoiceArray = this.state.Invoices.map(existingInvoice => {
           // if the `._id` matches the Invoice we want to update:
           // replace that element with the updatedInvoiceFromDB Invoice object
 
@@ -327,8 +302,7 @@ class Main extends React.Component
           displayEdit: false,
         })
       }
-      catch (err)
-      {
+      catch (err) {
         //console.log('could not delete this Invoice: ', err.response.data);
       }
     }
@@ -336,52 +310,50 @@ class Main extends React.Component
 
   // Invoices will load as soon as this page is loaded
   // the page will only be loaded if they get through auth0
-  componentDidMount()
-  {
+  componentDidMount() {
     this.getInvoices();
   }
-  render()
-  {
-
+  render() {
+    console.log("invoices in state: ", this.state.Invoices);
     return (
       this.state.displayAboutUs ?
         <AboutUs
-          handleAboutUs={ this.handleAboutUs } />
+          handleAboutUs={this.handleAboutUs} />
         :
         <>
 
-          { this.state.displayEdit ?
+          {this.state.displayEdit ?
             <EditForm
-              Invoice={ this.state.Invoice }
-              confirmDelete={ this.confirmDelete }
-              handleEditSubmit={ this.handleEditSubmit } />
+              Invoice={this.state.Invoice}
+              confirmDelete={this.confirmDelete}
+              handleEditSubmit={this.handleEditSubmit} />
             :
             <AddForm
-              handleAddSubmit={ this.handleAddSubmit }
-              handleCharCount={ this.handleCharCount }
+              handleAddSubmit={this.handleAddSubmit}
+              handleCharCount={this.handleCharCount}
             />
           }
           {
             this.state.Invoices.length
               ? <>
                 <InvoiceAccordion
-                  Invoices={ this.state.Invoices }
-                  handleModal={ this.handleModal }
-                  confirmDelete={ this.confirmDelete }
+                  Invoices={this.state.Invoices}
+                  handleModal={this.handleModal}
+                  confirmDelete={this.confirmDelete}
                 />
-                <InvoiceModal show={ this.state.showModal } handleModal={ this.handleModal }
-                  Invoices={ this.state.Invoices }
-                  modalId={ this.state.modalId }
-                  confirmDelete={ this.confirmDelete }
-                  showEditForm={ this.showEditForm }
+                <InvoiceModal show={this.state.showModal} handleModal={this.handleModal}
+                  Invoices={this.state.Invoices}
+                  modalId={this.state.modalId}
+                  confirmDelete={this.confirmDelete}
+                  showEditForm={this.showEditForm}
                 />
 
               </>
-              : <p>Write your beloved a Invoice!</p>
+              : <p></p>
 
 
           }
-          <Button style={ { width: "200px", margin: "auto" } } onClick={ () => this.handleAboutUs() }>Meet The Developers</Button>
+          <Button style={{ width: "200px", margin: "auto" }} onClick={() => this.handleAboutUs()}>Meet The Developers</Button>
         </>
     );
   }

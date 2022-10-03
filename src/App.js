@@ -25,10 +25,6 @@ import {
 import './App.css';
 
 
-
-
-
-
 class App extends React.Component
 {
   render()
@@ -52,6 +48,8 @@ class App extends React.Component
               ?
               <>
                 <Content />
+                <p></p>
+                <p></p>
                 <Main />
               </>
               : <></>

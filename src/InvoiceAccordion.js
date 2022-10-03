@@ -1,63 +1,59 @@
 //import axios from 'axios';
 import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
-class InvoiceAccordion extends React.Component
-{
-  constructor(props)
-  {
+class InvoiceAccordion extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       CompanysArr: [],
     }
   }
-  getCompanyNames = () =>
-  {
+  getCompanyNames = () => {
     let CompanysArr = [];
-    this.props.Invoices.forEach(Invoice =>
-    {
-      !CompanysArr.includes(Invoice.Company)
-        ? CompanysArr.push(Invoice.Company)
+    this.props.Invoices.forEach(Invoice => {
+      !CompanysArr.includes(Invoice.company_name)
+        ? CompanysArr.push(Invoice.company_name)
         : console.log('nothing here');
     });
     return CompanysArr;
   }
-  render()
-  {
+  render() {
     let arr = this.getCompanyNames();
+    //console.log('company names arr: ', arr);
 
-    let newArr = arr.map((Company, idx) =>
-    {
+    // create an array of accordian items for each `company_name`
+    let newArr = arr.map((company_name, idx) => {
       return (
         <>
-          <Accordion.Item key={ idx } eventKey={ idx }>
-            <Accordion.Header>{ Company }</Accordion.Header>
+          {/* make an a accordian name*/}
+          <Accordion.Item key={idx} eventKey={idx}>
+            {/* header of the accordian item is the `company_name` */}
+            <Accordion.Header>{company_name}</Accordion.Header>
             {
-              this.props.Invoices.map((Invoice, idx) =>
-              {
-                if (Invoice.Company === Company)
-                {
+              // inside each accordian item, make a list of projects under that company_name
+              this.props.Invoices.map((Invoice, idx) => {
+                if (Invoice.company_name === company_name) {
                   return (
                     <Accordion.Body
-                      key={ Invoice._id }
+                      key={Invoice._id}
                     >
-                      { Invoice.title }
+                      {Invoice.project_name}
                       <Button
-                        key={ `${ Invoice._id }_1` }
-                        onClick={ () => this.props.handleModal(Invoice._id) }
+                        key={`${Invoice._id}_1`}
+                        onClick={() => this.props.handleModal(Invoice._id)}
                       >
                         Open
                       </Button>
                       <Button
-                        key={ `${ Invoice._id }_2` }
-                        onClick={ () => this.props.confirmDelete(Invoice?._id) }
+                        key={`${Invoice._id}_2`}
+                        onClick={() => this.props.confirmDelete(Invoice?._id)}
                       >
                         Delete
                       </Button>
                     </Accordion.Body>
                   );
                 }
-                else
-                {
+                else {
                   return '';
                 }
               })
@@ -66,14 +62,13 @@ class InvoiceAccordion extends React.Component
         </>
       );
     })
-
     //this.getCompanyNames();
     //console.log('Invoice array in Invoice accordion: ', this.props.Invoices);
     return (
       <>
         <h3> Your Saved Invoices</h3>
         <Accordion>
-          { newArr }
+          {newArr}
         </Accordion>
       </>
     )
