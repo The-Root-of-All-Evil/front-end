@@ -48,6 +48,8 @@ class App extends React.Component
               ?
               <>
                 <Content />
+                <p></p>
+                <p></p>
                 <Main />
               </>
               : <></>

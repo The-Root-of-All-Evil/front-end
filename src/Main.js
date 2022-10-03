@@ -127,7 +127,7 @@ class Main extends React.Component {
     e.preventDefault();
     // //console.log('Invoice body in handle char: ', e.target.value);
     this.setState({
-      description: e.target.value,
+      addDescription: e.target.value,
     });
   }
 
@@ -241,10 +241,14 @@ class Main extends React.Component {
   handleEditSubmit = e => {
     e.preventDefault();
     let Invoice = {
-      title: e.target.title.value,
-      recipient: e.target.recipient.value,
-      InvoiceBody: e.target.InvoiceBody.value,
-      // email: [CALLED FROM AUTH0 SECRET STATE]
+     
+      company_name: e.target.editCompany.value,
+      project_name: e.target.editProject.value,
+      description: e.target.editDescription.value,
+      hourly_rate: e.target.editRate.value,
+      hours_worked: e.target.editHours.value,
+
+      //    email: [CALLED FROM AUTH0 SECRET STATE]
       email: this.props.auth0.user.email,
       _id: this.state.Invoice._id,
       __v: this.state.Invoice.__v

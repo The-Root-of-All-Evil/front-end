@@ -32,7 +32,7 @@ class AddForm extends React.Component {
 
         <Form.Group 
           className="mb-3" 
-          controlId="description"
+          controlId="addDescription"
         >
           <Form.Label>Project Billing Description (2000 Character Limit)</Form.Label>
           <Form.Control 
