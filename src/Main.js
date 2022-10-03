@@ -44,7 +44,7 @@ class Main extends React.Component {
         // this is the raw token
         // note the double underscore __ in .__raw
         const jwt = res.__raw;
-        // //console.log('jwt: ', jwt)
+        console.log('jwt: ', jwt)
 
 
         // config to do a `get` request from our server using the user's email
@@ -127,7 +127,7 @@ class Main extends React.Component {
     e.preventDefault();
     // //console.log('Invoice body in handle char: ', e.target.value);
     this.setState({
-      addDescription: e.target.value,
+      description: e.target.value,
     });
   }
 
@@ -164,7 +164,7 @@ class Main extends React.Component {
         let createdInvoice = await axios(config);
 
         // log the Invoice that axios returns to us
-        //console.log('createdInvoice: ', createdInvoice.data);
+        console.log('createdInvoice: ', createdInvoice.data);
 
 
         // use spread operator to make a deep copy of Invoices array in state, and concatenate the createdInvoice.data to the end
