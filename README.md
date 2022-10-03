@@ -2,7 +2,7 @@
 
 ## Deployed site
 
-Invoice Keeper](https://invoice-keeper.netlify.app/)
+[Invoice Keeper](https://invoice-keeper.netlify.app/)
 
 ## Authors
 
